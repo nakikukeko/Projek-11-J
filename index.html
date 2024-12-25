@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembagian Kelompok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7e9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #d147a3;
+        }
+        button {
+            background-color: #d147a3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #b03e85;
+        }
+        .kucing {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .kucing img {
+            width: 100px;
+            height: 100px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pembagian Kelompok</h1>
+    <p>Klik tombol di bawah untuk membagi kelompok.</p>
+    <button onclick="generateGroups()">Bagi Kelompok</button>
+    <div id="result"></div>
+    <div class="kucing">
+        <img src="https://placekitten.com/100/100" alt="Kucing Cowo">
+        <img src="https://placekitten.com/101/101" alt="Kucing Cewe">
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
