@@ -40,21 +40,24 @@ function generateGroups() {
 
     const groups = Array.from({ length: groupCount }, () => []);
 
-    // Randomly assign Bagus and Raniyah to the same group
-    const randomGroupIndex = Math.floor(Math.random() * groupCount);
-    groups[randomGroupIndex].push(bagus);
+    // Probabilitas 70% Bagus dan Raniyah satu kelompok
+    if (Math.random() <= 0.7) {
+        const randomGroupIndex = Math.floor(Math.random() * groupCount);
+        groups[randomGroupIndex].push(bagus, raniyah);
+    } else {
+        // 30% Bagus dan Raniyah di kelompok berbeda
+        const randomGroupIndexBagus = Math.floor(Math.random() * groupCount);
+        const randomGroupIndexRaniyah = Math.floor(Math.random() * groupCount);
+        groups[randomGroupIndexBagus].push(bagus);
+        groups[randomGroupIndexRaniyah].push(raniyah);
+    }
 
-    // Place Raniyah in the same group but not adjacent
-    const otherMembers = groups[randomGroupIndex].length;
-    const raniyahPosition = Math.max(0, Math.floor(Math.random() * (otherMembers + 1)));
-    groups[randomGroupIndex].splice(raniyahPosition, 0, raniyah);
-
-    // Distribute the rest
+    // Sebar anggota lain
     shuffled.forEach((person, index) => {
         groups[index % groupCount].push(person);
     });
 
-    // Display result
+    // Tampilkan hasil
     const resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "";
     groups.forEach((group, i) => {
