@@ -1,4 +1,3 @@
-
 const names = [
     { name: "Alliza", gender: "cewe" },
     { name: "Annisa", gender: "cewe" },
@@ -27,22 +26,42 @@ const names = [
     { name: "Wahyu", gender: "cowo" },
     { name: "Bayu", gender: "cowo" },
     { name: "Yasser", gender: "cowo" },
-    { name: "Yeni", gender: "cewe" },
+    { name: "Yeni", gender: "cewe" }
 ];
 
 function generateGroups() {
-    const shuffled = names.sort(() => Math.random() - 0.5);
-    const groupSize = Math.ceil(shuffled.length / 4);
-    let result = "";
+    const groupCount = parseInt(document.getElementById("groupCount").value);
+    const shuffled = [...names].sort(() => Math.random() - 0.5);
 
-    for (let i = 0; i < 4; i++) {
-        const group = shuffled.slice(i * groupSize, (i + 1) * groupSize);
-        result += `<h3>Kelompok ${i + 1}</h3><ul>`;
-        group.forEach(person => {
-            result += `<li>${person.name} (${person.gender})</li>`;
-        });
-        result += `</ul>`;
-    }
+    const bagus = shuffled.find(person => person.name === "Bagus");
+    const raniyah = shuffled.find(person => person.name === "Raniyah");
+    shuffled.splice(shuffled.indexOf(bagus), 1);
+    shuffled.splice(shuffled.indexOf(raniyah), 1);
 
-    document.getElementById("result").innerHTML = result;
+    const groups = Array.from({ length: groupCount }, () => []);
+
+    // Randomly assign Bagus and Raniyah to the same group
+    const randomGroupIndex = Math.floor(Math.random() * groupCount);
+    groups[randomGroupIndex].push(bagus);
+
+    // Place Raniyah in the same group but not adjacent
+    const otherMembers = groups[randomGroupIndex].length;
+    const raniyahPosition = Math.max(0, Math.floor(Math.random() * (otherMembers + 1)));
+    groups[randomGroupIndex].splice(raniyahPosition, 0, raniyah);
+
+    // Distribute the rest
+    shuffled.forEach((person, index) => {
+        groups[index % groupCount].push(person);
+    });
+
+    // Display result
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "";
+    groups.forEach((group, i) => {
+        const groupHTML = `
+            <h3>Kelompok ${i + 1}</h3>
+            <ul>${group.map(person => `<li>${person.name} (${person.gender})</li>`).join("")}</ul>
+        `;
+        resultDiv.innerHTML += groupHTML;
+    });
 }
