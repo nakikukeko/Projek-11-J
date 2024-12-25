@@ -40,19 +40,19 @@ function generateGroups() {
 
     const groups = Array.from({ length: groupCount }, () => []);
 
-    // Probabilitas 70% Bagus dan Raniyah satu kelompok
+    // 70% Bagus dan Raniyah satu kelompok, 30% beda kelompok
     if (Math.random() <= 0.7) {
         const randomGroupIndex = Math.floor(Math.random() * groupCount);
         groups[randomGroupIndex].push(bagus, raniyah);
     } else {
-        // 30% Bagus dan Raniyah di kelompok berbeda
+        // Bagus dan Raniyah di kelompok berbeda
         const randomGroupIndexBagus = Math.floor(Math.random() * groupCount);
         const randomGroupIndexRaniyah = Math.floor(Math.random() * groupCount);
         groups[randomGroupIndexBagus].push(bagus);
         groups[randomGroupIndexRaniyah].push(raniyah);
     }
 
-    // Sebar anggota lain
+    // Sebar anggota lainnya secara acak
     shuffled.forEach((person, index) => {
         groups[index % groupCount].push(person);
     });
