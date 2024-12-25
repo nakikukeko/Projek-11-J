@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,27 +27,26 @@
         button:hover {
             background-color: #b03e85;
         }
-        .kucing {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .kucing img {
-            width: 100px;
-            height: 100px;
-            margin: 0 10px;
+        select {
+            padding: 5px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #d147a3;
         }
     </style>
 </head>
 <body>
     <h1>Pembagian Kelompok</h1>
-    <p>Klik tombol di bawah untuk membagi kelompok.</p>
+    <p>Pilih jumlah kelompok terus klik tombol di bawah.</p>
+    <select id="groupCount">
+        <option value="2">2 Kelompok</option>
+        <option value="3">3 Kelompok</option>
+        <option value="4">4 Kelompok</option>
+        <option value="5">5 Kelompok</option>
+    </select>
+    <br>
     <button onclick="generateGroups()">Bagi Kelompok</button>
     <div id="result"></div>
-    <div class="kucing">
-        <img src="https://placekitten.com/100/100" alt="Kucing Cowo">
-        <img src="https://placekitten.com/101/101" alt="Kucing Cewe">
-    </div>
     <script src="script.js"></script>
 </body>
 </html>
