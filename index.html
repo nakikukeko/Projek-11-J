@@ -1,167 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembagian Kelompok</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffe6f0; /* Soft pink */
-            color: #333;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #d15b82;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .kelompok {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #ffd6e7;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #d15b82;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #b24a6a;
-        }
-        input {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #d15b82;
-            width: 50px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Pembagian Kelompok</h1>
-        <label for="jumlahKelompok">Masukkan jumlah kelompok (2-14):</label>
-        <input type="number" id="jumlahKelompok" min="2" max="14" value="2">
-        <button onclick="bagiKelompok()">Bagi Kelompok</button>
-        <div id="hasil"></div>
-    </div>
+<script>
+function bagiKelompok() {
+    const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
+    if (jumlahKelompok < 2 || jumlahKelompok > 14) {
+        alert("Jumlah kelompok harus antara 2 dan 14!");
+        return;
+    }
 
-    <script>
-        const dataKelas = [
-            { nama: "Alliza", gender: "cewe" },
-            { nama: "Annisa", gender: "cewe" },
-            { nama: "Aulia", gender: "cewe" },
-            { nama: "Azkha", gender: "cowo" },
-            { nama: "Bagus", gender: "cowo" },
-            { nama: "Devira", gender: "cewe" },
-            { nama: "Fathiyah", gender: "cewe" },
-            { nama: "Fatimah", gender: "cewe" },
-            { nama: "Julianto", gender: "cowo" },
-            { nama: "Kamila", gender: "cewe" },
-            { nama: "Kayla", gender: "cewe" },
-            { nama: "Khusnul", gender: "cewe" },
-            { nama: "Linda", gender: "cewe" },
-            { nama: "Aal", gender: "cowo" },
-            { nama: "Jihan", gender: "cewe" },
-            { nama: "Nadias", gender: "cewe" },
-            { nama: "Ami", gender: "cewe" },
-            { nama: "Dita", gender: "cewe" },
-            { nama: "Nala", gender: "cowo" },
-            { nama: "Maul", gender: "cowo" },
-            { nama: "Raniyah", gender: "cewe" },
-            { nama: "Revita", gender: "cewe" },
-            { nama: "Risda", gender: "cewe" },
-            { nama: "Shafa", gender: "cewe" },
-            { nama: "Wahyu", gender: "cowo" },
-            { nama: "Bayu", gender: "cowo" },
-            { nama: "Yasser", gender: "cowo" },
-            { nama: "Yeni", gender: "cewe" }
-        ];
+    const cowok = dataKelas.filter(s => s.gender === "cowo");
+    const cewek = dataKelas.filter(s => s.gender === "cewe");
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+    // Pastikan Bagus dan Raniyah satu kelompok
+    const bagus = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
+    const raniyah = cewek.splice(cewek.findIndex(s => s.nama === "Raniyah"), 1)[0];
+
+    const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+
+    // Pilih kelompok acak untuk Bagus dan Raniyah
+    const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
+    kelompok[kelompokBagusRaniyah].push(bagus);
+    kelompok[kelompokBagusRaniyah].push(null); // Separator
+    kelompok[kelompokBagusRaniyah].push(raniyah);
+
+    // Shuffle anggota lain
+    shuffle(cowok);
+    shuffle(cewek);
+
+    // Masukkan cowok ke setiap kelompok
+    let i = 0;
+    while (cowok.length > 0) {
+        kelompok[i % jumlahKelompok].push(cowok.pop());
+        i++;
+    }
+
+    // Masukkan cewek ke setiap kelompok
+    i = 0;
+    while (cewek.length > 0) {
+        kelompok[i % jumlahKelompok].push(cewek.pop());
+        i++;
+    }
+
+    // Hilangkan slot kosong
+    kelompok.forEach(k => {
+        const index = k.indexOf(null);
+        if (index > -1) k.splice(index, 1);
+    });
+
+    // Pastikan distribusi merata
+    while (kelompok.some(k => k.length > Math.ceil(dataKelas.length / jumlahKelompok))) {
+        for (let j = 0; j < jumlahKelompok - 1; j++) {
+            if (kelompok[j].length > Math.ceil(dataKelas.length / jumlahKelompok)) {
+                kelompok[j + 1].push(kelompok[j].pop());
             }
         }
+    }
 
-        function bagiKelompok() {
-            const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
-            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
-                alert("Jumlah kelompok harus antara 2 dan 14!");
-                return;
-            }
-
-            // Pisahkan cowok dan cewek
-            const cowok = dataKelas.filter(s => s.gender === "cowo");
-            const cewek = dataKelas.filter(s => s.gender === "cewe");
-
-            // Pastikan Bagus dan Raniyah selalu satu kelompok
-            const bagus = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
-            const raniyah = cewek.splice(cewek.findIndex(s => s.nama === "Raniyah"), 1)[0];
-
-            // Shuffle anggota lain
-            shuffle(cowok);
-            shuffle(cewek);
-
-            // Siapkan kelompok
-            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
-
-            // Masukkan Bagus dan Raniyah ke kelompok secara acak
-            const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
-            kelompok[kelompokBagusRaniyah].push(bagus, raniyah);
-
-            // Masukkan cowok ke setiap kelompok
-            let i = 0;
-            while (cowok.length > 0) {
-                kelompok[i % jumlahKelompok].push(cowok.pop());
-                i++;
-            }
-
-            // Masukkan cewek ke setiap kelompok
-            i = 0;
-            while (cewek.length > 0) {
-                kelompok[i % jumlahKelompok].push(cewek.pop());
-                i++;
-            }
-
-            // Pastikan kelompok merata
-            while (kelompok.some(k => k.length > Math.ceil(dataKelas.length / jumlahKelompok))) {
-                for (let j = 0; j < jumlahKelompok - 1; j++) {
-                    if (kelompok[j].length > Math.ceil(dataKelas.length / jumlahKelompok)) {
-                        kelompok[j + 1].push(kelompok[j].pop());
-                    }
-                }
-            }
-
-            // Tampilkan hasil
-            tampilkanKelompok(kelompok);
-        }
-
-        function tampilkanKelompok(kelompok) {
-            const hasilDiv = document.getElementById("hasil");
-            hasilDiv.innerHTML = ""; // Clear hasil sebelumnya
-
-            kelompok.forEach((k, index) => {
-                const div = document.createElement("div");
-                div.className = "kelompok";
-                div.innerHTML = `<strong>Kelompok ${index + 1}:</strong> ${k.map(s => s.nama).join(", ")}`;
-                hasilDiv.appendChild(div);
-            });
-        }
-    </script>
-</body>
-</html>
+    // Tampilkan hasil
+    tampilkanKelompok(kelompok);
+}
+</script>
