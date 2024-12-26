@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembagian Kelompok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7e9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #d147a3;
+        }
+        button {
+            background-color: #d147a3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #b03e85;
+        }
+        select {
+            padding: 5px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #d147a3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pembagian Kelompok</h1>
+    <p>Pilih jumlah kelompok terus klik tombol di bawah.</p>
+    <select id="groupCount">
+        <option value="2">2 Kelompok</option>
+        <option value="3">3 Kelompok</option>
+        <option value="4">4 Kelompok</option>
+        <option value="5">5 Kelompok</option>
+    </select>
+    <br>
+    <button onclick="generateGroups()">Bagi Kelompok</button>
+    <div id="result"></div>
+    <script src="script.js"></script>
+</body>
+</html>
