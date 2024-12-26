@@ -20,10 +20,11 @@ function bagiKelompok() {
     // Pilih kelompok acak untuk Bagus dan Raniyah
     const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
     
-    // Masukkan Bagus dan Raniyah dalam kelompok yang sama, pastikan mereka tidak langsung bersebelahan
+    // Masukkan Bagus ke kelompok, dan masukkan Raniyah di posisi yang bukan sebelahan dengan Bagus
     kelompok[kelompokBagusRaniyah].push(bagus);
-    kelompok[kelompokBagusRaniyah].push(null); // Tambahkan slot kosong untuk memisahkan
-    kelompok[kelompokBagusRaniyah].push(raniyah);
+    const posisiRaniyah = (kelompok[kelompokBagusRaniyah].length > 1) ? 
+        Math.floor(Math.random() * (kelompok[kelompokBagusRaniyah].length - 1)) : 1;
+    kelompok[kelompokBagusRaniyah].splice(posisiRaniyah, 0, raniyah); // Sisipkan Raniyah di tempat yang bukan sebelahan
 
     // Shuffle anggota lain (cowok dan cewek)
     shuffle(cowok);
@@ -42,12 +43,6 @@ function bagiKelompok() {
         kelompok[i % jumlahKelompok].push(cewek.pop());
         i++;
     }
-
-    // Hapus slot kosong untuk memisahkan Bagus dan Raniyah
-    kelompok.forEach(k => {
-        const index = k.indexOf(null);
-        if (index > -1) k.splice(index, 1);
-    });
 
     // Pastikan distribusi merata
     while (kelompok.some(k => k.length > Math.ceil(dataKelas.length / jumlahKelompok))) {
