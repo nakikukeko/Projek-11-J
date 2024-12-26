@@ -99,4 +99,38 @@
         }
 
         function bagiKelompok() {
-            const jumlahKelompok
+            const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
+            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
+                alert("Jumlah kelompok harus antara 2 dan 14!");
+                return;
+            }
+
+            shuffle(dataKelas);
+
+            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+
+            // Pembagian kelompok merata
+            let i = 0;
+            while (dataKelas.length) {
+                kelompok[i].push(dataKelas.pop());
+                i = (i + 1) % jumlahKelompok;
+            }
+
+            // Tampilkan hasil pembagian kelompok
+            tampilkanKelompok(kelompok);
+        }
+
+        function tampilkanKelompok(kelompok) {
+            const hasilDiv = document.getElementById("hasil");
+            hasilDiv.innerHTML = "";
+
+            kelompok.forEach((k, index) => {
+                const div = document.createElement("div");
+                div.className = "kelompok";
+                div.innerHTML = `<strong>Kelompok ${index + 1}:</strong> ${k.map(s => s.nama).join(", ")}`;
+                hasilDiv.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
