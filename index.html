@@ -105,10 +105,11 @@
                 return;
             }
 
-            shuffle(dataKelas);
+            // Membagi data ke dalam kelompok
+            shuffle(dataKelas);  // Mengacak data kelas
 
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
-
+            
             // Pembagian kelompok merata
             let i = 0;
             while (dataKelas.length) {
@@ -122,7 +123,7 @@
 
         function tampilkanKelompok(kelompok) {
             const hasilDiv = document.getElementById("hasil");
-            hasilDiv.innerHTML = "";
+            hasilDiv.innerHTML = "";  // Clear hasil sebelumnya
 
             kelompok.forEach((k, index) => {
                 const div = document.createElement("div");
