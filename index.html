@@ -41,11 +41,33 @@
         button:hover {
             background-color: #b24a6a;
         }
+        select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #d15b82;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Pembagian Kelompok</h1>
+        <label for="jumlahKelompok">Pilih jumlah kelompok (2-14):</label>
+        <select id="jumlahKelompok">
+            <!-- Dropdown untuk memilih jumlah kelompok -->
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+        </select>
         <button onclick="bagiKelompok()">Bagi Kelompok</button>
         <div id="hasil"></div>
     </div>
@@ -90,6 +112,7 @@
         }
 
         function bagiKelompok() {
+            const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
             const cowo = dataKelas.filter(s => s.gender === "cowo");
             const cewe = dataKelas.filter(s => s.gender === "cewe");
 
@@ -97,28 +120,21 @@
             shuffle(cewe);
 
             const kelompok = [];
-            const maxKelompok = Math.min(14, Math.ceil(dataKelas.length / 2));
-            let indexCowo = 0, indexCewe = 0;
-
-            for (let i = 0; i < maxKelompok; i++) {
+            for (let i = 0; i < jumlahKelompok; i++) {
                 kelompok.push([]);
             }
 
-            // Distribusi cowo dan cewe merata
-            for (let i = 0; i < maxKelompok; i++) {
-                if (indexCowo < cowo.length) kelompok[i].push(cowo[indexCowo++]);
-                if (indexCewe < cewe.length) kelompok[i].push(cewe[indexCewe++]);
+            let indexCowo = 0, indexCewe = 0;
+
+            // Distribusi merata cowo dan cewe
+            while (indexCowo < cowo.length || indexCewe < cewe.length) {
+                for (let i = 0; i < jumlahKelompok; i++) {
+                    if (indexCowo < cowo.length) kelompok[i].push(cowo[indexCowo++]);
+                    if (indexCewe < cewe.length) kelompok[i].push(cewe[indexCewe++]);
+                }
             }
 
-            // Jika masih ada siswa yang belum masuk kelompok
-            while (indexCowo < cowo.length) {
-                kelompok[indexCowo % maxKelompok].push(cowo[indexCowo++]);
-            }
-            while (indexCewe < cewe.length) {
-                kelompok[indexCewe % maxKelompok].push(cewe[indexCewe++]);
-            }
-
-            // Logika khusus untuk Bagus dan Raniyah
+            // Logika untuk Bagus dan Raniyah
             let peluangBagusRaniyah = Math.random() < 0.7;
             if (peluangBagusRaniyah) {
                 const kelompokBagus = kelompok.find(k => k.some(s => s.nama === "Bagus"));
@@ -130,7 +146,7 @@
 
                     if (Math.abs(indeksBagus - indeksRaniyah) <= 1) {
                         let randomPerson = kelompokBagus.pop();
-                        kelompok[(kelompok.indexOf(kelompokBagus) + 1) % maxKelompok].push(randomPerson);
+                        kelompok[(kelompok.indexOf(kelompokBagus) + 1) % jumlahKelompok].push(randomPerson);
                     }
                 }
             }
