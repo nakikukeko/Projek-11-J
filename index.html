@@ -105,34 +105,45 @@
                 return;
             }
 
-            // Buat array terpisah untuk Bagus dan Raniyah
-            let bagusRaniyah = dataKelas.filter(s => s.nama === 'Bagus' || s.nama === 'Raniyah');
-            let anggotaLain = dataKelas.filter(s => s.nama !== 'Bagus' && s.nama !== 'Raniyah');
+            // Pisahkan cowok dan cewek
+            const cowok = dataKelas.filter(s => s.gender === "cowo");
+            const cewek = dataKelas.filter(s => s.gender === "cewe");
 
-            // Shuffling anggota selain Bagus dan Raniyah
-            shuffle(anggotaLain);
+            // Pastikan Bagus dan Raniyah selalu satu kelompok
+            const bagusRaniyah = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
+            const raniyah = cewek.splice(cewek.findIndex(s => s.nama === "Raniyah"), 1)[0];
 
-            // Tentukan kelompok minimal merata
+            // Shuffle anggota lain
+            shuffle(cowok);
+            shuffle(cewek);
+
+            // Siapkan kelompok
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
 
-            // Masukkan Bagus dan Raniyah ke kelompok pertama bersama anggota lainnya
-            let i = 0;
-            kelompok[i].push(...bagusRaniyah);
-            i++;
+            // Masukkan Bagus dan Raniyah ke kelompok pertama
+            kelompok[0].push(bagusRaniyah, raniyah);
 
-            // Masukkan anggota lainnya ke dalam kelompok-kelompok yang tersedia
-            while (anggotaLain.length) {
-                kelompok[i].push(anggotaLain.pop());
-                i = (i + 1) % jumlahKelompok;
+            // Masukkan cowok ke setiap kelompok
+            let i = 1;
+            while (cowok.length > 0) {
+                kelompok[i % jumlahKelompok].push(cowok.pop());
+                i++;
             }
 
-            // Tampilkan hasil pembagian kelompok
+            // Masukkan cewek ke setiap kelompok
+            i = 0;
+            while (cewek.length > 0) {
+                kelompok[i % jumlahKelompok].push(cewek.pop());
+                i++;
+            }
+
+            // Tampilkan hasil
             tampilkanKelompok(kelompok);
         }
 
         function tampilkanKelompok(kelompok) {
             const hasilDiv = document.getElementById("hasil");
-            hasilDiv.innerHTML = "";  // Clear hasil sebelumnya
+            hasilDiv.innerHTML = ""; // Clear hasil sebelumnya
 
             kelompok.forEach((k, index) => {
                 const div = document.createElement("div");
