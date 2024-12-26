@@ -1,4 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembagian Kelompok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9d5d3; /* Soft pink background */
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .group-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .group-list li {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffb3b3;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Pembagian Kelompok</h1>
+    
+    <!-- Pilih jumlah kelompok -->
+    <label for="jumlahKelompok">Jumlah Kelompok (2-14): </label>
+    <select id="jumlahKelompok">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+    </select>
+    
+    <button onclick="bagiKelompok()">Bagi Kelompok</button>
+    
+    <ul id="kelompokOutput" class="group-list"></ul>
+</div>
+
 <script>
+// Data Nama Siswa
+const dataKelas = [
+    {nama: 'Alliza', gender: 'cewe'},
+    {nama: 'Annisa', gender: 'cewe'},
+    {nama: 'Aulia', gender: 'cewe'},
+    {nama: 'Azkha', gender: 'cowo'},
+    {nama: 'Bagus', gender: 'cowo'},
+    {nama: 'Devira', gender: 'cewe'},
+    {nama: 'Fathiyah', gender: 'cewe'},
+    {nama: 'Fatimah', gender: 'cewe'},
+    {nama: 'Julianto', gender: 'cowo'},
+    {nama: 'Kamila', gender: 'cewe'},
+    {nama: 'Kayla', gender: 'cewe'},
+    {nama: 'Khusnul', gender: 'cewe'},
+    {nama: 'Linda', gender: 'cewe'},
+    {nama: 'Aal', gender: 'cowo'},
+    {nama: 'Jihan', gender: 'cewe'},
+    {nama: 'Nadias', gender: 'cewe'},
+    {nama: 'Ami', gender: 'cewe'},
+    {nama: 'Dita', gender: 'cewe'},
+    {nama: 'Nala', gender: 'cowo'},
+    {nama: 'Maul', gender: 'cowo'},
+    {nama: 'Raniyah', gender: 'cewe'},
+    {nama: 'Revita', gender: 'cewe'},
+    {nama: 'Risda', gender: 'cewe'},
+    {nama: 'Shafa', gender: 'cewe'},
+    {nama: 'Wahyu', gender: 'cowo'},
+    {nama: 'Bayu', gender: 'cowo'},
+    {nama: 'Yasser', gender: 'cowo'},
+    {nama: 'Yeni', gender: 'cewe'}
+];
+
+// Fungsi Shuffle (acak urutan array)
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+// Fungsi Pembagian Kelompok
 function bagiKelompok() {
     const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
     if (jumlahKelompok < 2 || jumlahKelompok > 14) {
@@ -56,4 +172,18 @@ function bagiKelompok() {
     // Tampilkan hasil
     tampilkanKelompok(kelompok);
 }
+
+// Tampilkan Kelompok
+function tampilkanKelompok(kelompok) {
+    const output = document.getElementById("kelompokOutput");
+    output.innerHTML = "";
+    kelompok.forEach((k, index) => {
+        const li = document.createElement("li");
+        li.textContent = `Kelompok ${index + 1}: ${k.join(', ')}`;
+        output.appendChild(li);
+    });
+}
 </script>
+
+</body>
+</html>
