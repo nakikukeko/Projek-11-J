@@ -8,15 +8,24 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f8d7d9; /* Soft pink background */
+            padding: 20px;
         }
         #output {
             margin-top: 20px;
+        }
+        .kelompok {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
 
     <h2>Pembagian Kelompok</h2>
+
+    <label for="jumlahKelompok">Pilih Jumlah Kelompok (2-14):</label>
+    <input type="number" id="jumlahKelompok" min="2" max="14" value="7">
+    <button onclick="bagiKelompok()">Bagi Kelompok</button>
+
     <div id="output"></div>
 
     <script>
@@ -29,7 +38,14 @@
         ];
 
         // Fungsi untuk membagi peserta ke dalam kelompok
-        function bagiKelompok(jumlahKelompok) {
+        function bagiKelompok() {
+            let jumlahKelompok = document.getElementById("jumlahKelompok").value;
+
+            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
+                alert("Jumlah kelompok harus antara 2 dan 14.");
+                return;
+            }
+
             // Membagi peserta ke dalam kelompok
             let kelompok = [];
             for (let i = 0; i < jumlahKelompok; i++) {
@@ -39,31 +55,33 @@
             // Bagus dan Raniyah harus dalam kelompok yang sama
             let bagusIndex = peserta.indexOf("Bagus");
             let raniyahIndex = peserta.indexOf("Raniyah");
-            
-            // Menukar posisi jika Bagus dan Raniyah tidak berada dalam kelompok yang sama
-            if (bagusIndex !== raniyahIndex) {
-                peserta.splice(bagusIndex, 1);
-                peserta.splice(raniyahIndex, 1);
-                let kelompokIndex = Math.floor(Math.random() * jumlahKelompok);
-                kelompok[kelompokIndex].push("Bagus", "Raniyah");
-            }
 
-            // Mengisi kelompok dengan sisa peserta secara acak
-            peserta = peserta.filter((nama) => nama !== "Bagus" && nama !== "Raniyah");
+            // Menambahkan Bagus dan Raniyah ke kelompok yang sama
+            let kelompokIndex = Math.floor(Math.random() * jumlahKelompok);
+            kelompok[kelompokIndex].push("Bagus", "Raniyah");
+
+            // Menghapus Bagus dan Raniyah dari daftar peserta
+            peserta.splice(bagusIndex, 1);
+            peserta.splice(peserta.indexOf("Raniyah"), 1);
+
+            // Mengacak urutan peserta
             peserta = shuffleArray(peserta);
 
+            // Menambahkan peserta ke kelompok dengan merata
             let index = 0;
             for (let i = 0; i < jumlahKelompok; i++) {
-                while (kelompok[i].length < 2) { // Setiap kelompok minimal 2 orang
-                    kelompok[i].push(peserta[index]);
-                    index++;
+                while (kelompok[i].length < Math.ceil(peserta.length / jumlahKelompok)) {
+                    if (index < peserta.length) {
+                        kelompok[i].push(peserta[index]);
+                        index++;
+                    }
                 }
             }
 
-            // Menampilkan hasil kelompok
+            // Menampilkan hasil pembagian kelompok
             let outputHTML = "<h3>Hasil Pembagian Kelompok:</h3>";
             kelompok.forEach((k, i) => {
-                outputHTML += `<p>Kelompok ${i + 1}: ${k.join(", ")}</p>`;
+                outputHTML += `<div class="kelompok">Kelompok ${i + 1}: ${k.join(", ")}</div>`;
             });
 
             document.getElementById("output").innerHTML = outputHTML;
@@ -77,10 +95,6 @@
             }
             return array;
         }
-
-        // Contoh memanggil fungsi untuk membagi peserta ke dalam 7 kelompok
-        bagiKelompok(7);
-
     </script>
 
 </body>
