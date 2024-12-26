@@ -111,35 +111,33 @@
             shuffle(cowo);
             shuffle(cewe);
 
-            const kelompok = [];
-            for (let i = 0; i < jumlahKelompok; i++) {
-                kelompok.push([]);
+            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+
+            // Gabungkan cowo dan cewe, lalu distribusikan merata
+            const gabungan = [...cowo, ...cewe];
+            shuffle(gabungan);
+
+            let index = 0;
+            while (gabungan.length > 0) {
+                kelompok[index % jumlahKelompok].push(gabungan.pop());
+                index++;
             }
 
-            let indexCowo = 0, indexCewe = 0;
-
-            // Distribusi merata cowo dan cewe
-            while (indexCowo < cowo.length || indexCewe < cewe.length) {
-                for (let i = 0; i < jumlahKelompok; i++) {
-                    if (indexCowo < cowo.length) kelompok[i].push(cowo[indexCowo++]);
-                    if (indexCewe < cewe.length) kelompok[i].push(cewe[indexCewe++]);
-                }
-            }
-
-            // Logika untuk Bagus dan Raniyah
-            let peluangBagusRaniyah = Math.random() < 0.7;
+            // Logika khusus untuk Bagus dan Raniyah
+            const peluangBagusRaniyah = Math.random() < 0.7;
             if (peluangBagusRaniyah) {
-                const kelompokBagus = kelompok.find(k => k.some(s => s.nama === "Bagus"));
-                const kelompokRaniyah = kelompok.find(k => k.some(s => s.nama === "Raniyah"));
+                let kelompokBagus = -1, kelompokRaniyah = -1;
 
-                if (kelompokBagus && kelompokRaniyah && kelompokBagus === kelompokRaniyah) {
-                    const indeksBagus = kelompokBagus.findIndex(s => s.nama === "Bagus");
-                    const indeksRaniyah = kelompokBagus.findIndex(s => s.nama === "Raniyah");
+                for (let i = 0; i < kelompok.length; i++) {
+                    if (kelompok[i].some(s => s.nama === "Bagus")) kelompokBagus = i;
+                    if (kelompok[i].some(s => s.nama === "Raniyah")) kelompokRaniyah = i;
+                }
 
-                    if (Math.abs(indeksBagus - indeksRaniyah) <= 1) {
-                        let randomPerson = kelompokBagus.pop();
-                        kelompok[(kelompok.indexOf(kelompokBagus) + 1) % jumlahKelompok].push(randomPerson);
-                    }
+                if (kelompokBagus !== kelompokRaniyah) {
+                    // Pindahkan Raniyah ke kelompok Bagus
+                    const raniyah = kelompok[kelompokRaniyah].find(s => s.nama === "Raniyah");
+                    kelompok[kelompokRaniyah] = kelompok[kelompokRaniyah].filter(s => s.nama !== "Raniyah");
+                    kelompok[kelompokBagus].splice(1, 0, raniyah); // Masukkan Raniyah dengan jarak
                 }
             }
 
