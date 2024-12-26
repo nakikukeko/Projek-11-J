@@ -111,20 +111,24 @@
             shuffle(cowo);
             shuffle(cewe);
 
+            const totalSiswa = cowo.length + cewe.length;
+            const anggotaPerKelompok = Math.floor(totalSiswa / jumlahKelompok);
+            const sisa = totalSiswa % jumlahKelompok;
+
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
 
-            // Gabungkan cowo dan cewe, lalu distribusikan merata
-            const gabungan = [...cowo, ...cewe];
+            let gabungan = [...cowo, ...cewe];
             shuffle(gabungan);
 
-            let index = 0;
-            while (gabungan.length > 0) {
-                kelompok[index % jumlahKelompok].push(gabungan.pop());
-                index++;
+            for (let i = 0; i < jumlahKelompok; i++) {
+                const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
+                while (kelompok[i].length < targetSize) {
+                    kelompok[i].push(gabungan.pop());
+                }
             }
 
             // Logika khusus untuk Bagus dan Raniyah
-            const peluangBagusRaniyah = Math.random() < 0.7;
+            const peluangBagusRaniyah = Math.random() < 0.9;
             if (peluangBagusRaniyah) {
                 let kelompokBagus = -1, kelompokRaniyah = -1;
 
@@ -134,10 +138,9 @@
                 }
 
                 if (kelompokBagus !== kelompokRaniyah) {
-                    // Pindahkan Raniyah ke kelompok Bagus
                     const raniyah = kelompok[kelompokRaniyah].find(s => s.nama === "Raniyah");
                     kelompok[kelompokRaniyah] = kelompok[kelompokRaniyah].filter(s => s.nama !== "Raniyah");
-                    kelompok[kelompokBagus].splice(1, 0, raniyah); // Masukkan Raniyah dengan jarak
+                    kelompok[kelompokBagus].splice(1, 0, raniyah);
                 }
             }
 
