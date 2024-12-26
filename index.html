@@ -105,37 +105,28 @@
                 return;
             }
 
-            const cowo = dataKelas.filter(s => s.gender === "cowo");
-            const cewe = dataKelas.filter(s => s.gender === "cewe");
+            // Pisahkan Bagus dan Raniyah dalam satu kelompok
+            const bagus = dataKelas.find(s => s.nama === "Bagus");
+            const raniyah = dataKelas.find(s => s.nama === "Raniyah");
 
-            // Prioritaskan Bagus dan Raniyah agar 98% sekelompok
-            const bagusRaniyahProbability = Math.random();
-            if (bagusRaniyahProbability < 0.98) {
-                const kelompokBagusRaniyah = [cowo.find(s => s.nama === "Bagus"), cewe.find(s => s.nama === "Raniyah")];
-                shuffle(kelompokBagusRaniyah);
-                // Gabungkan mereka ke dalam satu kelompok
-                const gabungan = [...cowo, ...cewe].filter(s => s.nama !== "Bagus" && s.nama !== "Raniyah");
-                gabungan.push(...kelompokBagusRaniyah);
-                shuffle(gabungan);
+            // Ambil sisanya
+            const sisanya = dataKelas.filter(s => s.nama !== "Bagus" && s.nama !== "Raniyah");
 
-                // Pembagian kelompok merata
-                const totalSiswa = gabungan.length;
-                const anggotaPerKelompok = Math.floor(totalSiswa / jumlahKelompok);
-                const sisa = totalSiswa % jumlahKelompok;
+            shuffle(sisanya);
 
-                const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+            // Gabungkan Bagus dan Raniyah ke dalam satu kelompok
+            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+            kelompok[0].push(bagus, raniyah); // Pastikan Bagus dan Raniyah di kelompok pertama
 
-                let i = 0;
-                while (gabungan.length) {
-                    const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
-                    while (kelompok[i].length < targetSize && gabungan.length) {
-                        kelompok[i].push(gabungan.pop());
-                    }
-                    i = (i + 1) % jumlahKelompok;
-                }
-
-                tampilkanKelompok(kelompok);
+            // Pembagian kelompok merata
+            let i = 0;
+            while (sisanya.length) {
+                kelompok[i].push(sisanya.pop());
+                i = (i + 1) % jumlahKelompok;
             }
+
+            // Tampilkan hasil pembagian kelompok
+            tampilkanKelompok(kelompok);
         }
 
         function tampilkanKelompok(kelompok) {
