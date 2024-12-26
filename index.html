@@ -231,4 +231,19 @@ function bagiKelompok() {
     }
 
     // Tampilkan hasil
-    tampilkanKelompok(kel
+    tampilkanKelompok(kelompok);
+}
+
+function tampilkanKelompok(kelompok) {
+    const output = document.getElementById("kelompokOutput");
+    output.innerHTML = '';
+    kelompok.forEach((k, index) => {
+        const groupElement = document.createElement('li');
+        groupElement.innerHTML = `Kelompok ${index + 1}: ${k.map(s => s.nama).join(', ')}`;
+        output.appendChild(groupElement);
+    });
+}
+</script>
+
+</body>
+</html>
