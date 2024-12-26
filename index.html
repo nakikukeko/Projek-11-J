@@ -41,33 +41,20 @@
         button:hover {
             background-color: #b24a6a;
         }
-        select {
+        input {
             padding: 5px;
             border-radius: 5px;
             border: 1px solid #d15b82;
+            width: 50px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Pembagian Kelompok</h1>
-        <label for="jumlahKelompok">Pilih jumlah kelompok (2-14):</label>
-        <select id="jumlahKelompok">
-            <!-- Dropdown untuk memilih jumlah kelompok -->
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-        </select>
+        <label for="jumlahKelompok">Masukkan jumlah kelompok (2-14):</label>
+        <input type="number" id="jumlahKelompok" min="2" max="14" value="2">
         <button onclick="bagiKelompok()">Bagi Kelompok</button>
         <div id="hasil"></div>
     </div>
@@ -113,6 +100,11 @@
 
         function bagiKelompok() {
             const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
+            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
+                alert("Jumlah kelompok harus antara 2 dan 14!");
+                return;
+            }
+
             const cowo = dataKelas.filter(s => s.gender === "cowo");
             const cewe = dataKelas.filter(s => s.gender === "cewe");
 
@@ -167,4 +159,4 @@
         }
     </script>
 </body>
-  </html>
+</html>
