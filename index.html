@@ -111,37 +111,32 @@
             shuffle(cowo);
             shuffle(cewe);
 
-            const totalSiswa = cowo.length + cewe.length;
+            let gabungan = [...cowo, ...cewe];
+            shuffle(gabungan);
+
+            const totalSiswa = gabungan.length;
             const anggotaPerKelompok = Math.floor(totalSiswa / jumlahKelompok);
             const sisa = totalSiswa % jumlahKelompok;
 
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
 
-            let gabungan = [...cowo, ...cewe];
-            shuffle(gabungan);
-
-            for (let i = 0; i < jumlahKelompok; i++) {
-                const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
-                while (kelompok[i].length < targetSize) {
-                    kelompok[i].push(gabungan.pop());
-                }
-            }
-
-            // Logika khusus untuk Bagus dan Raniyah
+            // Pastikan Bagus dan Raniyah 90% peluang sekelompok
             const peluangBagusRaniyah = Math.random() < 0.9;
             if (peluangBagusRaniyah) {
-                let kelompokBagus = -1, kelompokRaniyah = -1;
+                const indeksKelompok = Math.floor(Math.random() * jumlahKelompok);
+                kelompok[indeksKelompok].push(gabungan.find(s => s.nama === "Bagus"));
+                kelompok[indeksKelompok].push(...gabungan.filter(s => s.nama === "Raniyah").splice(0, 1));
+            }
 
-                for (let i = 0; i < kelompok.length; i++) {
-                    if (kelompok[i].some(s => s.nama === "Bagus")) kelompokBagus = i;
-                    if (kelompok[i].some(s => s.nama === "Raniyah")) kelompokRaniyah = i;
+            // Distribusi merata
+            gabungan = gabungan.filter(s => !["Bagus", "Raniyah"].includes(s.nama));
+            let i = 0;
+            while (gabungan.length) {
+                const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
+                while (kelompok[i].length < targetSize && gabungan.length) {
+                    kelompok[i].push(gabungan.pop());
                 }
-
-                if (kelompokBagus !== kelompokRaniyah) {
-                    const raniyah = kelompok[kelompokRaniyah].find(s => s.nama === "Raniyah");
-                    kelompok[kelompokRaniyah] = kelompok[kelompokRaniyah].filter(s => s.nama !== "Raniyah");
-                    kelompok[kelompokBagus].splice(1, 0, raniyah);
-                }
+                i = (i + 1) % jumlahKelompok;
             }
 
             tampilkanKelompok(kelompok);
