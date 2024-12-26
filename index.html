@@ -99,47 +99,4 @@
         }
 
         function bagiKelompok() {
-            const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
-            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
-                alert("Jumlah kelompok harus antara 2 dan 14!");
-                return;
-            }
-
-            // Pisahkan Bagus dan Raniyah dalam satu kelompok
-            const bagus = dataKelas.find(s => s.nama === "Bagus");
-            const raniyah = dataKelas.find(s => s.nama === "Raniyah");
-
-            // Ambil sisanya
-            const sisanya = dataKelas.filter(s => s.nama !== "Bagus" && s.nama !== "Raniyah");
-
-            shuffle(sisanya);
-
-            // Gabungkan Bagus dan Raniyah ke dalam satu kelompok
-            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
-            kelompok[0].push(bagus, raniyah); // Pastikan Bagus dan Raniyah di kelompok pertama
-
-            // Pembagian kelompok merata
-            let i = 0;
-            while (sisanya.length) {
-                kelompok[i].push(sisanya.pop());
-                i = (i + 1) % jumlahKelompok;
-            }
-
-            // Tampilkan hasil pembagian kelompok
-            tampilkanKelompok(kelompok);
-        }
-
-        function tampilkanKelompok(kelompok) {
-            const hasilDiv = document.getElementById("hasil");
-            hasilDiv.innerHTML = "";
-
-            kelompok.forEach((k, index) => {
-                const div = document.createElement("div");
-                div.className = "kelompok";
-                div.innerHTML = `<strong>Kelompok ${index + 1}:</strong> ${k.map(s => s.nama).join(", ")}`;
-                hasilDiv.appendChild(div);
-            });
-        }
-    </script>
-</body>
-</html>
+            const jumlahKelompok
