@@ -110,7 +110,7 @@
             const cewek = dataKelas.filter(s => s.gender === "cewe");
 
             // Pastikan Bagus dan Raniyah selalu satu kelompok
-            const bagusRaniyah = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
+            const bagus = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
             const raniyah = cewek.splice(cewek.findIndex(s => s.nama === "Raniyah"), 1)[0];
 
             // Shuffle anggota lain
@@ -120,11 +120,12 @@
             // Siapkan kelompok
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
 
-            // Masukkan Bagus dan Raniyah ke kelompok pertama
-            kelompok[0].push(bagusRaniyah, raniyah);
+            // Masukkan Bagus dan Raniyah ke kelompok secara acak
+            const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
+            kelompok[kelompokBagusRaniyah].push(bagus, raniyah);
 
             // Masukkan cowok ke setiap kelompok
-            let i = 1;
+            let i = 0;
             while (cowok.length > 0) {
                 kelompok[i % jumlahKelompok].push(cowok.pop());
                 i++;
@@ -135,6 +136,15 @@
             while (cewek.length > 0) {
                 kelompok[i % jumlahKelompok].push(cewek.pop());
                 i++;
+            }
+
+            // Pastikan kelompok merata
+            while (kelompok.some(k => k.length > Math.ceil(dataKelas.length / jumlahKelompok))) {
+                for (let j = 0; j < jumlahKelompok - 1; j++) {
+                    if (kelompok[j].length > Math.ceil(dataKelas.length / jumlahKelompok)) {
+                        kelompok[j + 1].push(kelompok[j].pop());
+                    }
+                }
             }
 
             // Tampilkan hasil
