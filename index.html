@@ -105,15 +105,24 @@
                 return;
             }
 
-            // Membagi data ke dalam kelompok
-            shuffle(dataKelas);  // Mengacak data kelas
+            // Buat array terpisah untuk Bagus dan Raniyah
+            let bagusRaniyah = dataKelas.filter(s => s.nama === 'Bagus' || s.nama === 'Raniyah');
+            let anggotaLain = dataKelas.filter(s => s.nama !== 'Bagus' && s.nama !== 'Raniyah');
 
+            // Shuffling anggota selain Bagus dan Raniyah
+            shuffle(anggotaLain);
+
+            // Tentukan kelompok minimal merata
             const kelompok = Array.from({ length: jumlahKelompok }, () => []);
-            
-            // Pembagian kelompok merata
+
+            // Masukkan Bagus dan Raniyah ke kelompok pertama bersama anggota lainnya
             let i = 0;
-            while (dataKelas.length) {
-                kelompok[i].push(dataKelas.pop());
+            kelompok[i].push(...bagusRaniyah);
+            i++;
+
+            // Masukkan anggota lainnya ke dalam kelompok-kelompok yang tersedia
+            while (anggotaLain.length) {
+                kelompok[i].push(anggotaLain.pop());
                 i = (i + 1) % jumlahKelompok;
             }
 
