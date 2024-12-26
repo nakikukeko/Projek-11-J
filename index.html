@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,95 +7,188 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8d7d9; /* Soft pink background */
-            padding: 20px;
+            background-color: #f9d5d3; /* Soft pink background */
         }
-        #output {
-            margin-top: 20px;
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
         }
-        .kelompok {
+
+        .group-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .group-list li {
             margin: 10px 0;
+            font-size: 18px;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffb3b3;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff6666;
         }
     </style>
 </head>
 <body>
 
-    <h2>Pembagian Kelompok</h2>
-
-    <label for="jumlahKelompok">Pilih Jumlah Kelompok (2-14):</label>
-    <input type="number" id="jumlahKelompok" min="2" max="14" value="7">
+<div class="container">
+    <h1>Pembagian Kelompok</h1>
+    
+    <!-- Pilih jumlah kelompok -->
+    <label for="jumlahKelompok">Jumlah Kelompok (2-14): </label>
+    <select id="jumlahKelompok">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+    </select>
+    
     <button onclick="bagiKelompok()">Bagi Kelompok</button>
+    
+    <ul id="kelompokOutput" class="group-list"></ul>
+</div>
 
-    <div id="output"></div>
+<script>
+// Data Nama Siswa
+const dataKelas = [
+    {nama: 'Alliza', gender: 'cewe'},
+    {nama: 'Annisa', gender: 'cewe'},
+    {nama: 'Aulia', gender: 'cewe'},
+    {nama: 'Azkha', gender: 'cowo'},
+    {nama: 'Bagus', gender: 'cowo'},
+    {nama: 'Devira', gender: 'cewe'},
+    {nama: 'Fathiyah', gender: 'cewe'},
+    {nama: 'Fatimah', gender: 'cewe'},
+    {nama: 'Julianto', gender: 'cowo'},
+    {nama: 'Kamila', gender: 'cewe'},
+    {nama: 'Kayla', gender: 'cewe'},
+    {nama: 'Khusnul', gender: 'cewe'},
+    {nama: 'Linda', gender: 'cewe'},
+    {nama: 'Aal', gender: 'cowo'},
+    {nama: 'Jihan', gender: 'cewe'},
+    {nama: 'Nadias', gender: 'cewe'},
+    {nama: 'Ami', gender: 'cewe'},
+    {nama: 'Dita', gender: 'cewe'},
+    {nama: 'Nala', gender: 'cowo'},
+    {nama: 'Maul', gender: 'cowo'},
+    {nama: 'Raniyah', gender: 'cewe'},
+    {nama: 'Revita', gender: 'cewe'},
+    {nama: 'Risda', gender: 'cewe'},
+    {nama: 'Shafa', gender: 'cewe'},
+    {nama: 'Wahyu', gender: 'cowo'},
+    {nama: 'Bayu', gender: 'cowo'},
+    {nama: 'Yasser', gender: 'cowo'},
+    {nama: 'Yeni', gender: 'cewe'}
+];
 
-    <script>
-        // Data nama peserta
-        let peserta = [
-            "Alliza", "Annisa", "Aulia", "Azka", "Bagus", "Devira", "Fathiyah", 
-            "Fatimah", "Julianto", "Kamila", "Kayla", "Khusnul", "Linda", "Aal", 
-            "Jihan", "Nadias", "Ami", "Dita", "Nala", "Maul", "Raniyah", "Revita", 
-            "Risda", "Shafa", "Wahyu", "Bayu", "Yasser", "Yeni"
-        ];
+// Fungsi Shuffle (acak urutan array)
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
 
-        // Fungsi untuk membagi peserta ke dalam kelompok
-        function bagiKelompok() {
-            let jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
+// Fungsi Pembagian Kelompok
+function bagiKelompok() {
+    const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
+    if (jumlahKelompok < 2 || jumlahKelompok > 14) {
+        alert("Jumlah kelompok harus antara 2 dan 14!");
+        return;
+    }
 
-            if (jumlahKelompok < 2 || jumlahKelompok > 14) {
-                alert("Jumlah kelompok harus antara 2 dan 14.");
-                return;
+    // Pisahkan cowok dan cewek
+    const cowok = dataKelas.filter(s => s.gender === "cowo");
+    const cewek = dataKelas.filter(s => s.gender === "cewe");
+
+    // Pastikan Bagus dan Raniyah selalu satu kelompok
+    const bagus = cowok.splice(cowok.findIndex(s => s.nama === "Bagus"), 1)[0];
+    const raniyah = cewek.splice(cewek.findIndex(s => s.nama === "Raniyah"), 1)[0];
+
+    // Siapkan kelompok
+    const kelompok = Array.from({ length: jumlahKelompok }, () => []);
+
+    // Pilih kelompok acak untuk Bagus dan Raniyah
+    const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
+    
+    // Masukkan Bagus ke kelompok, dan masukkan Raniyah di posisi yang bukan sebelahan dengan Bagus
+    kelompok[kelompokBagusRaniyah].push(bagus);
+    let posisiRaniyah = Math.floor(Math.random() * kelompok[kelompokBagusRaniyah].length);
+    // Pastikan Raniyah tidak berada di posisi yang bersebelahan dengan Bagus
+    if (posisiRaniyah === 0) {
+        posisiRaniyah = 1;
+    } else if (posisiRaniyah === kelompok[kelompokBagusRaniyah].length - 1) {
+        posisiRaniyah = kelompok[kelompokBagusRaniyah].length - 2;
+    }
+    kelompok[kelompokBagusRaniyah].splice(posisiRaniyah, 0, raniyah);
+
+    // Shuffle anggota lain (cowok dan cewek)
+    shuffle(cowok);
+    shuffle(cewek);
+
+    // Masukkan cowok ke setiap kelompok
+    let i = 0;
+    while (cowok.length > 0) {
+        kelompok[i % jumlahKelompok].push(cowok.pop());
+        i++;
+    }
+
+    // Masukkan cewek ke setiap kelompok
+    i = 0;
+    while (cewek.length > 0) {
+        kelompok[i % jumlahKelompok].push(cewek.pop());
+        i++;
+    }
+
+    // Pastikan distribusi merata
+    while (kelompok.some(k => k.length > Math.ceil(dataKelas.length / jumlahKelompok))) {
+        for (let j = 0; j < jumlahKelompok - 1; j++) {
+            if (kelompok[j].length > Math.ceil(dataKelas.length / jumlahKelompok)) {
+                kelompok[j + 1].push(kelompok[j].pop());
             }
-
-            // Membagi peserta ke dalam kelompok
-            let kelompok = [];
-            for (let i = 0; i < jumlahKelompok; i++) {
-                kelompok.push([]);
-            }
-
-            // Bagus dan Raniyah harus dalam kelompok yang sama
-            let bagusIndex = peserta.indexOf("Bagus");
-            let raniyahIndex = peserta.indexOf("Raniyah");
-
-            // Menambahkan Bagus dan Raniyah ke kelompok yang sama
-            let kelompokIndex = Math.floor(Math.random() * jumlahKelompok);
-            kelompok[kelompokIndex].push("Bagus", "Raniyah");
-
-            // Menghapus Bagus dan Raniyah dari daftar peserta
-            peserta.splice(bagusIndex, 1);
-            peserta.splice(peserta.indexOf("Raniyah"), 1);
-
-            // Mengacak urutan peserta
-            peserta = shuffleArray(peserta);
-
-            // Menambahkan peserta ke kelompok dengan merata
-            let index = 0;
-            for (let i = 0; i < jumlahKelompok; i++) {
-                while (kelompok[i].length < Math.ceil(peserta.length / jumlahKelompok)) {
-                    if (index < peserta.length) {
-                        kelompok[i].push(peserta[index]);
-                        index++;
-                    }
-                }
-            }
-
-            // Menampilkan hasil pembagian kelompok
-            let outputHTML = "<h3>Hasil Pembagian Kelompok:</h3>";
-            kelompok.forEach((k, i) => {
-                outputHTML += `<div class="kelompok">Kelompok ${i + 1}: ${k.join(", ")}</div>`;
-            });
-
-            document.getElementById("output").innerHTML = outputHTML;
         }
+    }
 
-        // Fungsi untuk mengacak array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-    </script>
+    // Tampilkan hasil
+    tampilkanKelompok(kelompok);
+}
+
+// Tampilkan Kelompok
+function tampilkanKelompok(kelompok) {
+    const output = document.getElementById("kelompokOutput");
+    output.innerHTML = "";
+    kelompok.forEach((k, index) => {
+        const li = document.createElement("li");
+        li.textContent = `Kelompok ${index + 1}: ${k.join(', ')}`;
+        output.appendChild(li);
+    });
+}
+</script>
 
 </body>
 </html>
