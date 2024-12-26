@@ -1,4 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembagian Kelompok</title>
+    <style>
+        /* Global styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the select dropdown and button */
+        select, button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            width: 100%;
+            max-width: 250px;
+            cursor: pointer;
+        }
+
+        select {
+            background-color: #f0f8ff;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Group list styling */
+        .group-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .group-list li {
+            font-size: 1.1em;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .group-list li:hover {
+            transform: scale(1.05);
+            background-color: #e0f7fa;
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            select, button {
+                max-width: 100%;
+            }
+
+            .group-list li {
+                font-size: 1em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Pembagian Kelompok</h1>
+    
+    <!-- Pilih jumlah kelompok -->
+    <label for="jumlahKelompok">Jumlah Kelompok (2-14): </label>
+    <select id="jumlahKelompok">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+    </select>
+    
+    <button onclick="bagiKelompok()">Bagi Kelompok</button>
+    
+    <ul id="kelompokOutput" class="group-list"></ul>
+</div>
+
 <script>
+// Data Nama Siswa
+const dataKelas = [
+    {nama: 'Alliza', gender: 'cewe'},
+    {nama: 'Annisa', gender: 'cewe'},
+    {nama: 'Aulia', gender: 'cewe'},
+    {nama: 'Azkha', gender: 'cowo'},
+    {nama: 'Bagus', gender: 'cowo'},
+    {nama: 'Devira', gender: 'cewe'},
+    {nama: 'Fathiyah', gender: 'cewe'},
+    {nama: 'Fatimah', gender: 'cewe'},
+    {nama: 'Julianto', gender: 'cowo'},
+    {nama: 'Kamila', gender: 'cewe'},
+    {nama: 'Kayla', gender: 'cewe'},
+    {nama: 'Khusnul', gender: 'cewe'},
+    {nama: 'Linda', gender: 'cewe'},
+    {nama: 'Aal', gender: 'cowo'},
+    {nama: 'Jihan', gender: 'cewe'},
+    {nama: 'Nadias', gender: 'cewe'},
+    {nama: 'Ami', gender: 'cewe'},
+    {nama: 'Dita', gender: 'cewe'},
+    {nama: 'Nala', gender: 'cowo'},
+    {nama: 'Maul', gender: 'cowo'},
+    {nama: 'Raniyah', gender: 'cewe'},
+    {nama: 'Revita', gender: 'cewe'},
+    {nama: 'Risda', gender: 'cewe'},
+    {nama: 'Shafa', gender: 'cewe'},
+    {nama: 'Wahyu', gender: 'cowo'},
+    {nama: 'Bayu', gender: 'cowo'},
+    {nama: 'Yasser', gender: 'cowo'},
+    {nama: 'Yeni', gender: 'cewe'}
+];
+
+// Fungsi Shuffle (acak urutan array)
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+// Fungsi Pembagian Kelompok
 function bagiKelompok() {
     const jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
     if (jumlahKelompok < 2 || jumlahKelompok > 14) {
@@ -20,18 +188,20 @@ function bagiKelompok() {
     // Pilih kelompok acak untuk Bagus dan Raniyah
     const kelompokBagusRaniyah = Math.floor(Math.random() * jumlahKelompok);
     
-    // Masukkan Bagus ke kelompok, dan masukkan Raniyah di posisi yang bukan sebelahan dengan Bagus
+    // Masukkan Bagus ke kelompok
     kelompok[kelompokBagusRaniyah].push(bagus);
-    let posisiRaniyah;
     
-    // Cari posisi yang bukan bersebelahan dengan Bagus
-    if (kelompok[kelompokBagusRaniyah].length > 1) {
-        posisiRaniyah = Math.floor(Math.random() * (kelompok[kelompokBagusRaniyah].length - 1));
-    } else {
-        posisiRaniyah = 1;  // Jika hanya ada satu anggota (Bagus), Raniyah bisa masuk di posisi 1
+    // Cari posisi untuk Raniyah yang tidak bersebelahan dengan Bagus
+    let posisiRaniyah = Math.floor(Math.random() * (kelompok[kelompokBagusRaniyah].length + 1));
+    
+    // Jika Raniyah jatuh di posisi setelah Bagus, pastikan dia tidak bersebelahan
+    if (posisiRaniyah === 0) {
+        posisiRaniyah = 1; // Jika posisi 0, maka Raniyah akan ditempatkan di posisi 1
+    } else if (posisiRaniyah === 1 && kelompok[kelompokBagusRaniyah].length > 1) {
+        posisiRaniyah = 2; // Jika posisi 1, pastikan Raniyah tidak langsung setelah Bagus
     }
     
-    kelompok[kelompokBagusRaniyah].splice(posisiRaniyah, 0, raniyah); // Sisipkan Raniyah di tempat yang bukan sebelahan
+    kelompok[kelompokBagusRaniyah].splice(posisiRaniyah, 0, raniyah);
 
     // Shuffle anggota lain (cowok dan cewek)
     shuffle(cowok);
@@ -61,6 +231,4 @@ function bagiKelompok() {
     }
 
     // Tampilkan hasil
-    tampilkanKelompok(kelompok);
-}
-</script>
+    tampilkanKelompok(kel
