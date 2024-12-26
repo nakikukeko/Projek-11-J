@@ -108,38 +108,34 @@
             const cowo = dataKelas.filter(s => s.gender === "cowo");
             const cewe = dataKelas.filter(s => s.gender === "cewe");
 
-            shuffle(cowo);
-            shuffle(cewe);
+            // Prioritaskan Bagus dan Raniyah agar 98% sekelompok
+            const bagusRaniyahProbability = Math.random();
+            if (bagusRaniyahProbability < 0.98) {
+                const kelompokBagusRaniyah = [cowo.find(s => s.nama === "Bagus"), cewe.find(s => s.nama === "Raniyah")];
+                shuffle(kelompokBagusRaniyah);
+                // Gabungkan mereka ke dalam satu kelompok
+                const gabungan = [...cowo, ...cewe].filter(s => s.nama !== "Bagus" && s.nama !== "Raniyah");
+                gabungan.push(...kelompokBagusRaniyah);
+                shuffle(gabungan);
 
-            let gabungan = [...cowo, ...cewe];
-            shuffle(gabungan);
+                // Pembagian kelompok merata
+                const totalSiswa = gabungan.length;
+                const anggotaPerKelompok = Math.floor(totalSiswa / jumlahKelompok);
+                const sisa = totalSiswa % jumlahKelompok;
 
-            const totalSiswa = gabungan.length;
-            const anggotaPerKelompok = Math.floor(totalSiswa / jumlahKelompok);
-            const sisa = totalSiswa % jumlahKelompok;
+                const kelompok = Array.from({ length: jumlahKelompok }, () => []);
 
-            const kelompok = Array.from({ length: jumlahKelompok }, () => []);
-
-            // Pastikan Bagus dan Raniyah 90% peluang sekelompok
-            const peluangBagusRaniyah = Math.random() < 0.9;
-            if (peluangBagusRaniyah) {
-                const indeksKelompok = Math.floor(Math.random() * jumlahKelompok);
-                kelompok[indeksKelompok].push(gabungan.find(s => s.nama === "Bagus"));
-                kelompok[indeksKelompok].push(...gabungan.filter(s => s.nama === "Raniyah").splice(0, 1));
-            }
-
-            // Distribusi merata
-            gabungan = gabungan.filter(s => !["Bagus", "Raniyah"].includes(s.nama));
-            let i = 0;
-            while (gabungan.length) {
-                const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
-                while (kelompok[i].length < targetSize && gabungan.length) {
-                    kelompok[i].push(gabungan.pop());
+                let i = 0;
+                while (gabungan.length) {
+                    const targetSize = anggotaPerKelompok + (i < sisa ? 1 : 0);
+                    while (kelompok[i].length < targetSize && gabungan.length) {
+                        kelompok[i].push(gabungan.pop());
+                    }
+                    i = (i + 1) % jumlahKelompok;
                 }
-                i = (i + 1) % jumlahKelompok;
-            }
 
-            tampilkanKelompok(kelompok);
+                tampilkanKelompok(kelompok);
+            }
         }
 
         function tampilkanKelompok(kelompok) {
