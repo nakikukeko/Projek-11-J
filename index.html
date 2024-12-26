@@ -39,7 +39,7 @@
 
         // Fungsi untuk membagi peserta ke dalam kelompok
         function bagiKelompok() {
-            let jumlahKelompok = document.getElementById("jumlahKelompok").value;
+            let jumlahKelompok = parseInt(document.getElementById("jumlahKelompok").value);
 
             if (jumlahKelompok < 2 || jumlahKelompok > 14) {
                 alert("Jumlah kelompok harus antara 2 dan 14.");
